@@ -1,15 +1,17 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/KK6GFo6mPOi
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react"
 
-export default function LogModal({children, onClick}:{children: React.ReactNode, onClick: () => void}) {
+export default function LogModal({children, onClick}:{children: React.ReactNode, onClick: (param: string) => void}) {
 
+  const [data, setData] = useState("")
+  const handleClick = () => {
+    if(!data) return
+    onClick(data)
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -26,6 +28,8 @@ export default function LogModal({children, onClick}:{children: React.ReactNode,
             </Label>
             <Textarea
               id="reason"
+              onChange={(e) => setData(e.target.value)}
+              value={data}
               placeholder="Enter the reason for your work log"
               className="min-h-[100px] text-foreground"
             />
@@ -39,7 +43,7 @@ export default function LogModal({children, onClick}:{children: React.ReactNode,
         </div>
         <DialogFooter>
         <DialogClose asChild>
-          <Button onClick={onClick} type="submit" className="text-foreground">
+          <Button onClick={handleClick} type="submit" className="text-foreground">
             Confirm
           </Button>
         </DialogClose>
